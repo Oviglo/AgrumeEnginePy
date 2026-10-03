@@ -10,19 +10,27 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from agrume import Agrume
 from agrume.scene import Scene
 from agrume.entity import Entity
-from agrume.physics_entity import PhysicEntity
+from pygame.math import Vector2
 
 game = Agrume("Exemple 1: Simple Scene")
 scene = Scene("main")
-entity = PhysicEntity((300, 150), None, (100, 100))
-entity.velocity.x = 5
-scene.add_entity(entity)
 game.set_current_scene(scene)
 
+# Settings object
+entity = Entity((300, 150), None, (100, 100))
+entity.image.fill("lightpink2")
+scene.add_entity(entity)
+scene.bg_color = "snow2"
+direction: Vector2 = Vector2(1, 1)
+speed = 4
+
+
 def update(delta: float) -> None:
-    if entity.rect.bottom >= game.viewport_size.y:
-        entity.bounce_y()
-    if entity.rect.left < 0 or entity.rect.right > game.viewport_size.x:
-        entity.bounce_x()
+    entity.rect.center += (direction * speed)
+    if entity.rect.top <= 0 or entity.rect.bottom >= scene.rect.bottom:
+        direction.y *= -1
+
+    if entity.rect.left <= 0 or entity.rect.right >= scene.rect.right:
+        direction.x *= -1
 
 game.run(update)

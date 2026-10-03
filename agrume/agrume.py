@@ -16,6 +16,7 @@ from pygame.math import Vector2
 from pygame.surface import Surface
 from pygame.time import Clock
 from .scene import Scene
+from .input import Input
 
 class Agrume:
     def __init__(self, name: str, window_size: Vector2 = Vector2(1280, 768), viewport_size: Vector2 = None):
@@ -31,6 +32,7 @@ class Agrume:
         self.delta_time = 0.0
         self.framerate = 60
         self.current_scene: Scene = None
+        self.input = Input()
 
     def run(self, update_callback: function = None) -> None:
         """ Run the game loop
@@ -39,6 +41,8 @@ class Agrume:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
+                else:
+                    self.manage_input(event)
 
             # Update & draw current scene
             if self.current_scene:
@@ -47,16 +51,21 @@ class Agrume:
 
             # Resize viewport surface into window
             self.window_surface.blit(pygame.transform.scale(self.viewport_surface, self.window_surface.get_size()), (0, 0))
-            pygame.display.update()
 
             if update_callback:
                 update_callback(self.delta_time)
 
             self.delta_time = self.clock.tick(self.framerate) / 1000.0
             self.delta_time = max(0.001, min(self.delta_time, 0.1)) + 1.0
+
+            pygame.display.update()
             
 
         pygame.quit()
 
     def set_current_scene(self, scene: Scene) -> None:
+        scene.agrume = self
         self.current_scene = scene
+
+    def manage_input(self, event: pygame.event) -> None:
+        self.input.on_pygame_event(event)

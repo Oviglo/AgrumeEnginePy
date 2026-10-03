@@ -14,6 +14,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .scene import Scene
+    from .movement import Movement
+
 from pygame.surface import Surface
 from pygame.sprite import Sprite
 from pygame.math import Vector2
@@ -25,17 +27,33 @@ class Entity(Sprite):
         if image_path:
             self.image = pygame.image.load(image_path).convert_alpha()
         else:
-            self.image = Surface(size)
+            self.image = Surface(size, pygame.HWSURFACE)
 
         self.rect = self.image.get_frect()
         self.rect.topleft = position
-        self.scene: Scene = None
+        self.__scene: Scene = None
+        self.__movement: Movement = None
 
     def draw(self, target: Surface) -> None:
         pass
 
     def update(self, delta: float) -> None:
-        pass
+        if self.movement:
+            self.movement.update(delta)
 
-    def set_scene(self, scene: Scene) -> None:
-        self.scene = scene
+    @property
+    def scene(self) -> Scene:
+        return self.__scene
+
+    @scene.setter
+    def scene(self, scene: Scene) -> None:
+        self.__scene = scene
+
+    @property
+    def movement(self) -> Movement:
+        return self.__movement
+
+    @movement.setter
+    def movement(self, movement: Movement) -> None:
+        movement.entity = self
+        self.__movement = movement
