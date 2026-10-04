@@ -14,6 +14,7 @@ from pygame.surface import Surface
 from pygame.math import Vector2
 from pygame.sprite import Group
 from pygame.color import Color
+from pygame.sprite import spritecollide
 from .entity import Entity
 
 from typing import TYPE_CHECKING
@@ -66,3 +67,6 @@ class Scene:
 
         entity.scene = self
         entity.add(self.layers[0])
+
+    def get_collide_entities(self, entity: Entity, layer: int = 0) -> list[Entity]:
+        return spritecollide(entity, self.layers[layer], False)

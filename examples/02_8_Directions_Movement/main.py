@@ -29,4 +29,13 @@ player = Entity(Vector2(0, 0), Path("player_down.png"))
 player.movement = EightDirectionsMovement()
 scene.add_entity(player)
 
-game.run()
+# Create wall
+wall = Entity(Vector2(300, 100), None, Vector2(80, 300))
+wall.image.fill("mediumorchid4")
+scene.add_entity(wall)
+
+def update(delta: float):
+    if wall in scene.get_collide_entities(player):
+        player.movement.collide_entities = [wall]
+
+game.run(update)

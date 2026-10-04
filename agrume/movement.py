@@ -18,15 +18,17 @@ if TYPE_CHECKING:
     from .entity import Entity
 
 class Movement():
-    def __init__(self, input: Input):
-        self.__input = input
+    def __init__(self):
+        self.__input: Input = None
         self.__entity: Entity = None
         self.direction: Vector2 = Vector2(0, 0)
         self.velocity: Vector2 = Vector2(0, 0)
 
+        # Collision
+        self.collide_entities: list[Entity] = []
+
     def update(self, delta: float) -> None:
-        if self.__entity:
-            self.__entity.rect.center += self.velocity
+        pass
 
     @property
     def entity(self) -> Entity:
@@ -35,3 +37,6 @@ class Movement():
     @entity.setter
     def entity(self, entity: Entity) -> None:
         self.__entity = entity
+
+    def stop(self):
+        self.velocity = Vector2(0, 0)

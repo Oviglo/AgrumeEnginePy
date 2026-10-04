@@ -31,6 +31,7 @@ class Entity(Sprite):
 
         self.rect = self.image.get_frect()
         self.rect.topleft = position
+        self.hitbox_rect = self.rect.inflate(0, 0)
         self.__scene: Scene = None
         self.__movement: Movement = None
 
