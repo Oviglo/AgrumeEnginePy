@@ -60,6 +60,14 @@ class EightDirectionsMovement(Movement):
 
         self.entity.rect.center = self.entity.hitbox_rect.center
 
+        # Animation
+        if self.entity.current_animation:
+            animation = self.entity.current_animation
+            if not self.is_move() and animation.is_play:
+                animation.stop()
+            elif self.is_move() and not animation.is_play:
+                animation.play()
+
     def handle_collision(self, direction: str) -> None:
         for entity in self.collide_entities:
             if entity.hitbox_rect.colliderect(self.entity.hitbox_rect):
@@ -75,5 +83,7 @@ class EightDirectionsMovement(Movement):
                         self.entity.hitbox_rect.top = entity.hitbox_rect.bottom
                     if self.direction.y > 0:
                         self.entity.hitbox_rect.bottom = entity.hitbox_rect.top
-        
+
+    def is_move(self) -> bool:
+        return abs(self.velocity.x) > 1 or abs(self.velocity.y) > 1
         
