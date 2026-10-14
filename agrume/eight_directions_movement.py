@@ -12,6 +12,7 @@ eight_directions_movement.py: 8 directions movement
 """
 from .movement import Movement
 from pygame.math import Vector2
+from pygame import Rect
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -39,13 +40,13 @@ class EightDirectionsMovement(Movement):
         
         input = self.entity.scene.agrume.input
         if input.is_active(self.input_map["up"]):
-            self.direction.y = -1
+            self.set_direction_y(-1)
         if input.is_active(self.input_map['down']):
-            self.direction.y = 1
+            self.set_direction_y(1)
         if input.is_active(self.input_map["left"]):
-            self.direction.x = -1
+            self.set_direction_x(-1)
         if input.is_active(self.input_map['right']):
-            self.direction.x = 1
+            self.set_direction_x(1)
 
         normalized_direction: Vector2 = self.direction.normalize() if self.direction != Vector2(0, 0) else self.direction
         speed:float = self.max_speed / 10
@@ -70,20 +71,22 @@ class EightDirectionsMovement(Movement):
 
     def handle_collision(self, direction: str) -> None:
         for entity in self.collide_entities:
-            if entity.hitbox_rect.colliderect(self.entity.hitbox_rect):
-                if direction == "x":
-                    self.velocity.x = 0
-                    if self.direction.x > 0: 
-                        self.entity.hitbox_rect.right = entity.hitbox_rect.left
-                    if self.direction.x < 0:
-                        self.entity.hitbox_rect.left = entity.hitbox_rect.right
-                else:
-                    self.velocity.y = 0
-                    if self.direction.y < 0: 
-                        self.entity.hitbox_rect.top = entity.hitbox_rect.bottom
-                    if self.direction.y > 0:
-                        self.entity.hitbox_rect.bottom = entity.hitbox_rect.top
+            collide_rects = entity.get_collide_rects(self.entity.hitbox_rect)
+
+            for collide_rect in collide_rects:
+                if collide_rect:
+                    if direction == "x":
+                        self.velocity.x = 0
+                        if self.direction.x > 0: 
+                            self.entity.hitbox_rect.right = collide_rect.left
+                        if self.direction.x < 0:
+                            self.entity.hitbox_rect.left = collide_rect.right
+                    else:
+                        self.velocity.y = 0
+                        if self.direction.y < 0: 
+                            self.entity.hitbox_rect.top = collide_rect.bottom
+                        if self.direction.y > 0:
+                            self.entity.hitbox_rect.bottom = collide_rect.top
 
     def is_move(self) -> bool:
         return abs(self.velocity.x) > 1 or abs(self.velocity.y) > 1
-        

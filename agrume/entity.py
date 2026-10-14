@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 from pygame.surface import Surface
 from pygame.sprite import Sprite
 from pygame.math import Vector2
+from pygame import Rect
 import pygame
 
 class Entity(Sprite):
@@ -79,3 +80,9 @@ class Entity(Sprite):
     def set_current_animation(self, name: str) -> None:
         if name in self.animations:
             self.current_animation = self.animations[name]
+
+    def get_collide_rects(self, rect: Rect) -> list[Rect]:
+        if self.hitbox_rect.colliderect(rect):
+            return [self.hitbox_rect]
+
+        return []

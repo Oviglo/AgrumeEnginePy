@@ -18,20 +18,20 @@ from pygame import Rect
 class Spritesheet:
     def __init__(self, image_path: str, size: Vector2 = Vector2(1, 1)) -> None:
         self.image_path = image_path
-        self._size = size
+        self.__size = size
         self.frames: list[Surface] = []
         self.generate_frames()
 
     @property
     def size(self) -> Vector2:
-        return self._size
+        return self.__size
 
     @size.setter
     def size(self, size: Vector2) -> None:
         if size.x <= 0 or size.y <= 0:
             print("Could not have size with 0")
             raise
-        self._size = size
+        self.__size = size
 
     def generate_frames(self) -> None:
         surf = load(self.image_path).convert_alpha()
