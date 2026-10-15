@@ -29,7 +29,7 @@ class EightDirectionsMovement(Movement):
         self.max_speed: float = 100.0
         self.input_map = {"up": self.UP, "down": self.DOWN, "left": self.LEFT, "right": self.RIGHT}
         self.acceleration: float = 1
-        self.deceleration: float = 0.15
+        self.deceleration: float = 0.1
 
     def update(self, delta: float) -> None:
         if not self.entity:
@@ -76,17 +76,19 @@ class EightDirectionsMovement(Movement):
             for collide_rect in collide_rects:
                 if collide_rect:
                     if direction == "x":
-                        self.velocity.x = 0
-                        if self.direction.x > 0: 
+                        if self.velocity.x > 0: 
                             self.entity.hitbox_rect.right = collide_rect.left
-                        if self.direction.x < 0:
+                        if self.velocity.x < 0:
                             self.entity.hitbox_rect.left = collide_rect.right
+
+                        self.velocity.x = 0
                     else:
-                        self.velocity.y = 0
-                        if self.direction.y < 0: 
+                        if self.velocity.y < 0: 
                             self.entity.hitbox_rect.top = collide_rect.bottom
-                        if self.direction.y > 0:
+                        if self.velocity.y > 0:
                             self.entity.hitbox_rect.bottom = collide_rect.top
+
+                        self.velocity.y = 0
 
     def is_move(self) -> bool:
         return abs(self.velocity.x) > 1 or abs(self.velocity.y) > 1

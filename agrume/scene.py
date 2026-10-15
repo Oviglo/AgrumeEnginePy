@@ -33,7 +33,7 @@ class Scene:
         self.__agrume: Agrume = None
 
         # Environnement
-        self.gravity: Vector2 = (0, 0)
+        self.gravity: Vector2 = Vector2(0, 0)
 
     @property
     def agrume(self) -> Agrume:

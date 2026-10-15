@@ -93,19 +93,6 @@ player.movement.on_direction_change = on_player_change_direction
 player.movement.collide_entities = [wall, tilemap]
 
 def update(delta: float):
-
-    """tiles = tilemap.get_collide_tiles(player.hitbox_rect)
-
-    for tile in tiles:
-        tile_rect = tilemap.get_tile_rect(tile)
-        player.movement.stop()
-        if player.movement.direction.x > 0:
-            player.hitbox_rect.right = tile_rect.left
-        if player.movement.direction.x < 0:
-            player.hitbox_rect.left = tile_rect.right
-        if player.movement.direction.y > 0:
-            player.hitbox_rect.bottom = tile_rect.top
-        if player.movement.direction.y < 0:
-            player.hitbox_rect.top = tile_rect.bottom"""
+    pass
 
 game.run(update)

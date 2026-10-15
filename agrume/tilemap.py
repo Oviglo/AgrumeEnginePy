@@ -53,7 +53,7 @@ class Tilemap(Entity):
 
         # Grid
         self.grid_color: Color = Color(10, 10, 10, 120)
-        self.show_grid: bool = True
+        self.show_grid: bool = False
 
         # Dynamic size
         self.__size: Vector2 = Vector2(1, 1)
@@ -95,6 +95,7 @@ class Tilemap(Entity):
         self.__size.y = max(self.__size.y, pos.y + 1)
         self.rect.w = self.__size.x * self.__tile_size
         self.rect.h = self.__size.y * self.__tile_size
+        self.hitbox_rect = self.rect
         self.image = transform.scale(self.image, (self.rect.w, self.rect.h))
 
         self.need_redraw = True
@@ -129,9 +130,12 @@ class Tilemap(Entity):
         return result
 
     def update(self, delta: float) -> None:
+        super().update(delta)
         if self.need_redraw:
-            self.image.fill(Color(0, 0, 0))
+            self.image.set_colorkey((255, 0, 255))
+            self.image.fill(Color(255, 0, 255))
             self.draw_rect(self.image, self.rect)
+            
             if self.show_grid:
                 self.draw_grid()
             self.need_redraw = False
